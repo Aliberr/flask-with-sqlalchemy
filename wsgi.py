@@ -1,7 +1,7 @@
 # wsgi.py
 import os
 import logging
-from flask import Flask, request
+from flask import Flask, request, render_template
 from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
@@ -14,10 +14,15 @@ ma = Marshmallow(app)
 from models import Product
 from schemas import product_schema, products_schema
 
+@app.route('/')
+def home():
+    products = db.session.query(Product).all()
+    return render_template('home.html', products=products)
+
 
 @app.route('/hello')
 def hello():
-    return "Hello World!"
+    return "Hello World"
 
 @app.route('/products', methods=['GET', 'POST'])
 def products():
